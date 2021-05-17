@@ -48,3 +48,6 @@ def test_fit():
     df=df.drop(["label"],axis=1)
     df=pd.concat([df,classlar2],axis=1)
     df.to_csv("test_submission.csv",index=False)
+
+
+test_fit()
