@@ -2,19 +2,98 @@ from torch import nn
 import torch
 from torch.utils.data import DataLoader
 from dataloader import VoiceDataset,Voice_load
-dataset=Voice_load()
+import pandas as pd
+import numpy as np
+import os
+import librosa
+from specAugment import spec_augment_pytorch
+from tqdm import tqdm
 
-class voice_dataloader():
-    def __init__(self):
-        self.train_dataset = VoiceDataset(dataset.train)
-        self.train_dataloader = DataLoader(self.train_dataset, batch_size=64, shuffle=True)
 
-        self.val_dataset = VoiceDataset(dataset.val)
-        self.val_dataloader = DataLoader(self.val_dataset, batch_size=64, shuffle=True)
+def voice_dataloader():
+    train,val=Voice_load()
+    if not os.path.exists("train_feature.csv") and not os.path.exists("val_feature.csv") :
+        train_feature = {"classes": [], "feature_path": []}
+        mel_limit = 32
+        for (index, row) in tqdm(train.iterrows(), total=len(train)):
+            path = row.wav_path
 
-        self.dataloaders= {'train': self.train_dataloader,
-                    'val': self.val_dataloader}
-        self.data_sizes = {'train': len(self.train_dataset), 'val': len(self.val_dataset)}
+            signal, sampling_rate = librosa.load(path, sr=None)
+            mel_spectrogram = librosa.feature.melspectrogram(signal, sampling_rate)
+            mel_spectrogram = torch.from_numpy(mel_spectrogram)
+
+            # padding & cutting
+            length = mel_spectrogram.shape[1]
+            n_mels = mel_spectrogram.shape[0]
+            if length < mel_limit:
+                pad_tensor = torch.zeros((n_mels, mel_limit-length))
+                mel_spectrogram = torch.cat((mel_spectrogram, pad_tensor), 1)
+            mel_spectrogram = mel_spectrogram[:, :mel_limit]
+            # print(mel_spectrogram.shape)
+            warped_masked_spectrogram = spec_augment_pytorch.spec_augment(mel_spectrogram=mel_spectrogram.T.unsqueeze(0))
+
+            np.save(path.replace(".wav", ""),mel_spectrogram.T)
+            np.save(path.replace(".wav", "_aug"),warped_masked_spectrogram.T.numpy())
+
+            train_feature["feature_path"].append(path.replace(".wav", ""))
+            train_feature["classes"].append(row.classes)
+
+            train_feature["feature_path"].append(path.replace(".wav", "_aug"))
+            train_feature["classes"].append(row.classes)
+
+        pd.DataFrame(train_feature).to_csv("train_feature.csv")
+
+        val_feature = {"classes": [], "feature_path": []}
+        mel_limit = 32
+        for (index, row) in tqdm(val.iterrows(), total=len(val)):
+            path = row.wav_path
+
+            signal, sampling_rate = librosa.load(path, sr=None)
+            mel_spectrogram = librosa.feature.melspectrogram(signal, sampling_rate)
+            mel_spectrogram = torch.from_numpy(mel_spectrogram)
+
+            # padding & cutting
+            length = mel_spectrogram.shape[1]
+            n_mels = mel_spectrogram.shape[0]
+            if length < mel_limit:
+                pad_tensor = torch.zeros((n_mels, mel_limit-length))
+                mel_spectrogram = torch.cat((mel_spectrogram, pad_tensor), 1)
+            mel_spectrogram = mel_spectrogram[:, :mel_limit]
+            # print(mel_spectrogram.shape)
+            warped_masked_spectrogram = spec_augment_pytorch.spec_augment(mel_spectrogram=mel_spectrogram.T.unsqueeze(0))
+
+            np.save(path.replace(".wav", ""),mel_spectrogram.T)
+            np.save(path.replace(".wav", "_aug"),warped_masked_spectrogram.T.numpy())
+
+            val_feature["feature_path"].append(path.replace(".wav", ""))
+            val_feature["classes"].append(row.classes)
+
+            val_feature["feature_path"].append(path.replace(".wav", "_aug"))
+            val_feature["classes"].append(row.classes)
+
+
+            pd.DataFrame(val_feature).to_csv("val_feature.csv")
+    else:
+        train_feature=pd.read_csv("train_feature.csv")
+        val_feature=pd.read_csv("val_feature.csv")
+
+    
+    
+    #train = pd.read_csv("train_feature.csv")
+    #val = pd.read_csv("val_feature.csv")
+
+    train_dataset = VoiceDataset(train_feature)
+    train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+
+    val_dataset = VoiceDataset(val_feature)
+    val_dataloader = DataLoader(val_dataset, batch_size=64, shuffle=True)
+
+    dataloaders= {'train': train_dataloader,
+                'val': val_dataloader}
+    data_sizes = {'train': len(train_dataset), 'val': len(val_dataset)}
+    return train_dataset,dataloaders,data_sizes
+
+
         
         
 
