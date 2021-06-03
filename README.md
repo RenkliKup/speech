@@ -15,4 +15,7 @@ We used the data of a competition organized by Google Brain at kaggle.
 ### These:
 "Yes", "No", "Up", "Down", "Left", "Right", "On", "Off", "Stop", "Go", "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight","Nine","Bed", "Bird", "Cat", "Dog", "Happy", "House", "Marvin", "Sheila", "Tree", and "Wow".
 
-# How to Run:
+# How to Quick Run :
+first of all download dataset, then at dataset folder will be train folder and test folder, extraction the your project directory them.
+Example:
+![alt text](https://github.com/RenkliKup/speech/blob/main/img/Screenshot_3.png)
