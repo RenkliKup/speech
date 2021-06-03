@@ -27,3 +27,4 @@ We used the data of a competition organized by Google Brain at kaggle.
  ### *[specAugment](https://pypi.org/project/SpecAugment/)
  ### *[pathlib](https://pypi.org/project/pathlib/)
  
+## 3)Run test.py in project file directory
