@@ -19,7 +19,7 @@ We used the data of a competition organized by Google Brain at kaggle.
 ## 1) first of all download dataset, then at dataset folder will be train folder and test folder, extraction the your project directory them.
 Example:
 ![alt text](https://github.com/RenkliKup/speech/blob/main/img/Screenshot_3.png)
-## 2) Dependicy Python Modules:
+## 2) Necessary Python Modules:
  ### *[torch](https://pypi.org/project/torch/)
  ### *[Librosa](https://pypi.org/project/librosa/)
  ### *[soundfile](https://pypi.org/project/SoundFile/)
