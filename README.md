@@ -14,7 +14,7 @@ We used the data of a competition organized by Google Brain at kaggle.
 "Yes", "No", "Up", "Down", "Left", "Right", "On", "Off", "Stop", "Go", "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight","Nine","Bed", "Bird", "Cat", "Dog", "Happy", "House", "Marvin", "Sheila", "Tree", and "Wow".
 
 # How to Quick Run :
-## 1) first of all download dataset, then at dataset folder will be train folder and test folder, extraction the your project directory them.
+## 1) First of all download dataset, then at dataset folder will be train folder and test folder, extraction the your project directory them.
 ### Example:
 ![alt text](https://github.com/RenkliKup/speech/blob/main/img/Screenshot_3.png)
 ## 2) Necessary Python Modules:
