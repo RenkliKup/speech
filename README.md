@@ -19,3 +19,4 @@ We used the data of a competition organized by Google Brain at kaggle.
 first of all download dataset, then at dataset folder will be train folder and test folder, extraction the your project directory them.
 Example:
 ![alt text](https://github.com/RenkliKup/speech/blob/main/img/Screenshot_3.png)
+if you are done
