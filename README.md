@@ -1,5 +1,3 @@
-u# speech
-
 ## How to download data?
 
 We used the data of a competition organized by Google Brain at kaggle.
